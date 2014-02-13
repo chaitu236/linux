@@ -252,4 +252,8 @@ config FW_DEVLINK_SYNC_STATE_TIMEOUT
 config DEVICE_POLL
 	bool
 
+config DEVICE_POLL_NI_COMPAT
+	bool
+	default y if DEVICE_POLL
+
 endmenu
