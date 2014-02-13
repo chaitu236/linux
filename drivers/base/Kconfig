@@ -249,4 +249,7 @@ config FW_DEVLINK_SYNC_STATE_TIMEOUT
 	  command line option on every system/board your kernel is expected to
 	  work on.
 
+config DEVICE_POLL
+	bool
+
 endmenu
