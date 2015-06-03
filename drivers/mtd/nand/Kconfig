@@ -69,6 +69,13 @@ config MTD_NAND_ECC_REALTEK
         help
           This enables support for the hardware ECC engine from Realtek.
 
+config MTD_NAND_PL353
+	tristate "ARM Pl353 NAND flash driver"
+	depends on MTD_NAND && ARM
+	select PL353_SMC
+	help
+	  This enables access to the NAND flash device on PL353 SMC controller.
+
 endmenu
 
 endmenu
