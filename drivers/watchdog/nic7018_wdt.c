@@ -416,6 +416,15 @@ static int nic7018_probe(struct platform_device *pdev)
 		return ret;
 	}
 
+	ret = devm_request_threaded_irq(dev, irq, NULL,
+					nic7018_thread_isr,
+					IRQF_ONESHOT,
+					KBUILD_MODNAME, wdt);
+	if (ret) {
+		dev_err(dev, "failed to register interrupt handler\n");
+		return ret;
+	}
+
 	/* Unlock WDT register */
 	outb(UNLOCK, wdt->io_base + WDT_REG_LOCK);
 
