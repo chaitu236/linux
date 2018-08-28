@@ -1699,8 +1699,6 @@ static int ksz9031_read_status(struct phy_device *phydev)
 			    phy_interrupt_is_valid(phydev))
 				phydev->drv->config_intr(phydev);
 		} else {
-			INIT_DELAYED_WORK(&priv->poll_work,
-					ksz9031_autoneg_poll);
 			queue_delayed_work(system_power_efficient_wq,
 					   &priv->poll_work,
 					   PHY_STATE_TIME * HZ);
@@ -2584,6 +2582,9 @@ static int kszphy_probe(struct phy_device *phydev)
 
 	priv->phydev = phydev;
 	phydev->priv = priv;
+
+	INIT_DELAYED_WORK(&priv->poll_work,
+			  ksz9031_autoneg_poll);
 
 	priv->type = type;
 
