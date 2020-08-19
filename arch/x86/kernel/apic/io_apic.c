@@ -1690,7 +1690,7 @@ static bool io_apic_level_ack_pending(struct mp_chip_data *data)
 
 static inline bool ioapic_prepare_move(struct irq_data *data)
 {
-	/* If we are moving the irq we need to mask it */
+	/* If we are moving the IRQ we need to mask it */
 	if (unlikely(irqd_is_setaffinity_pending(data))) {
 		if (!irqd_irq_masked(data))
 			mask_ioapic_irq(data);
@@ -1730,7 +1730,7 @@ static inline void ioapic_finish_move(struct irq_data *data, bool moveit)
 		 */
 		if (!io_apic_level_ack_pending(data->chip_data))
 			irq_move_masked_irq(data);
-		/* If the irq is masked in the core, leave it */
+		/* If the IRQ is masked in the core, leave it: */
 		if (!irqd_irq_masked(data))
 			unmask_ioapic_irq(data);
 	}
@@ -2233,12 +2233,12 @@ static int mp_irqdomain_create(int ioapic)
 	ip->irqdomain = irq_domain_create_linear(fn, hwirqs, cfg->ops,
 						 (void *)(long)ioapic);
 
-	/* Release fw handle if it was allocated above */
-	if (!cfg->dev)
-		irq_domain_free_fwnode(fn);
-
-	if (!ip->irqdomain)
+	if (!ip->irqdomain) {
+		/* Release fw handle if it was allocated above */
+		if (!cfg->dev)
+			irq_domain_free_fwnode(fn);
 		return -ENOMEM;
+	}
 
 	ip->irqdomain->parent = parent;
 
