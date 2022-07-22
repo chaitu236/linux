@@ -111,8 +111,14 @@ unmap:
 
 static const struct property_entry dwc3_pci_intel_properties[] = {
 	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
-	PROPERTY_ENTRY_BOOL("snps,has_dsm_for_softreset"),
 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
+	{}
+};
+
+static const struct property_entry dwc3_pci_bxt_properties[] = {
+	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
+	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
+	PROPERTY_ENTRY_BOOL("snps,has_dsm_for_softreset"),
 	{}
 };
 
@@ -334,13 +340,13 @@ static const struct pci_device_id dwc3_pci_id_table[] = {
 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
 
 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BXT),
-	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
+	  (kernel_ulong_t) &dwc3_pci_bxt_properties, },
 
 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_BXT_M),
-	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
+	  (kernel_ulong_t) &dwc3_pci_bxt_properties, },
 
 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_APL),
-	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
+	  (kernel_ulong_t) &dwc3_pci_bxt_properties, },
 
 	{ PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_KBP),
 	  (kernel_ulong_t) &dwc3_pci_intel_properties, },
