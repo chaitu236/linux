@@ -111,7 +111,7 @@ unmap:
 
 static const struct property_entry dwc3_pci_intel_properties[] = {
 	PROPERTY_ENTRY_STRING("dr_mode", "peripheral"),
-	PROPERTY_ENTRY_BOOL("snps,has_dsm_for_softreset"),
+	//PROPERTY_ENTRY_BOOL("snps,has_dsm_for_softreset"),
 	PROPERTY_ENTRY_BOOL("linux,sysdev_is_parent"),
 	{}
 };
@@ -177,7 +177,7 @@ static int dwc3_pci_quirks(struct dwc3_pci *dwc)
 			 * the GPIOs, add a fallback mapping to the reference
 			 * design GPIOs which all boards seem to use.
 			 */
-			gpiod_add_lookup_table(&platform_bytcr_gpios);
+			//gpiod_add_lookup_table(&platform_bytcr_gpios);
 
 			/*
 			 * These GPIOs will turn on the USB2 PHY. Note that we have to
@@ -301,8 +301,8 @@ static void dwc3_pci_remove(struct pci_dev *pci)
 	struct dwc3_pci		*dwc = pci_get_drvdata(pci);
 	struct pci_dev		*pdev = dwc->pci;
 
-	if (pdev->device == PCI_DEVICE_ID_INTEL_BYT)
-		gpiod_remove_lookup_table(&platform_bytcr_gpios);
+	//if (pdev->device == PCI_DEVICE_ID_INTEL_BYT)
+	//	gpiod_remove_lookup_table(&platform_bytcr_gpios);
 #ifdef CONFIG_PM
 	cancel_work_sync(&dwc->wakeup_work);
 #endif
