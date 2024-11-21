@@ -252,11 +252,11 @@ static int ni16550_get_regs(struct platform_device *pdev,
 	return -EINVAL;
 }
 
-	/*
-	 * Very old implementations don't have the TFS or RFS registers
-	 * defined, so we may read all-0s or all-1s. For such devices,
-	 * assume a FIFO size of 128.
-	 */
+/*
+ * Very old implementations don't have the TFS or RFS registers
+ * defined, so we may read all-0s or all-1s. For such devices,
+ * assume a FIFO size of 128.
+ */
 static u8 ni16550_read_fifo_size(struct uart_8250_port *uart, int reg)
 {
 	u8 value = serial_in(uart, reg);
