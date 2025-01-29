@@ -470,7 +470,6 @@ static struct platform_driver ni16550_driver = {
 
 module_platform_driver(ni16550_driver);
 
-MODULE_AUTHOR("Jaeden Amero <jaeden.amero@ni.com>");
-MODULE_AUTHOR("Karthik Manamcheri <karthik.manamcheri@ni.com>");
+MODULE_AUTHOR("Emerson Electric Co.");
 MODULE_DESCRIPTION("NI 16550 Driver");
 MODULE_LICENSE("GPL");
