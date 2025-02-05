@@ -46,14 +46,14 @@
 /*
  * Wire Mode      | Tx enabled?          | Rx enabled?
  * ---------------|----------------------|--------------------------
- * PCR_RS422      | Always               | Always
+ * PCR_FOURWIRE   | Always               | Always
  * PCR_ECHO_RS485 | When DTR asserted    | Always
  * PCR_DTR_RS485  | When DTR asserted    | Disabled when TX enabled
  * PCR_AUTO_RS485 | When data in TX FIFO | Disabled when TX enabled
  */
 #define NI16550_PCR_OFFSET	0x0F
 #define NI16550_PCR_WIRE_MODE_MASK		GENMASK(1, 0)
-#define NI16550_PCR_RS422			FIELD_PREP(NI16550_PCR_WIRE_MODE_MASK, 0)
+#define NI16550_PCR_FOURWIRE			FIELD_PREP(NI16550_PCR_WIRE_MODE_MASK, 0)
 #define NI16550_PCR_ECHO_RS485			FIELD_PREP(NI16550_PCR_WIRE_MODE_MASK, 1)
 #define NI16550_PCR_DTR_RS485			FIELD_PREP(NI16550_PCR_WIRE_MODE_MASK, 2)
 #define NI16550_PCR_AUTO_RS485			FIELD_PREP(NI16550_PCR_WIRE_MODE_MASK, 3)
@@ -113,9 +113,8 @@ static int ni16550_rs485_config(struct uart_port *port,
 		pcr |= NI16550_PCR_AUTO_RS485;
 		up->acr |= NI16550_ACR_AUTO_DTR_EN;
 	} else {
-		/* RS-422 */
 		dev_dbg(port->dev, "4-wire\n");
-		pcr |= NI16550_PCR_RS422;
+		pcr |= NI16550_PCR_FOURWIRE;
 		up->acr &= ~NI16550_ACR_AUTO_DTR_EN;
 	}
 
