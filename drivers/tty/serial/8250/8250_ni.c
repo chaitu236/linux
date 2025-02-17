@@ -443,6 +443,8 @@ static const struct acpi_device_id ni16550_acpi_match[] = {
 	{ },
 };
 MODULE_DEVICE_TABLE(acpi, ni16550_acpi_match);
+#else
+static const struct acpi_device_id ni16550_acpi_match[] = {};
 #endif
 
 static struct platform_driver ni16550_driver = {
