@@ -108,15 +108,14 @@ static int ni16550_rs485_config(struct uart_port *port,
 	pcr = serial_in(up, NI16550_PCR_OFFSET);
 	pcr &= ~NI16550_PCR_WIRE_MODE_MASK;
 
-	if ((rs485->flags & SER_RS485_MODE_RS422) ||
-	    !(rs485->flags & SER_RS485_ENABLED)) {
-		/* RS-422 */
-		pcr |= NI16550_PCR_RS422;
-		up->acr &= ~NI16550_ACR_AUTO_DTR_EN;
-	} else {
+	if (rs485->flags & SER_RS485_ENABLED) {
 		/* RS-485 2-wire Auto */
 		pcr |= NI16550_PCR_AUTO_RS485;
 		up->acr |= NI16550_ACR_AUTO_DTR_EN;
+	} else {
+		/* RS-422 */
+		pcr |= NI16550_PCR_RS422;
+		up->acr &= ~NI16550_ACR_AUTO_DTR_EN;
 	}
 
 	dev_dbg(port->dev, "config rs485: write pcr: 0x%02x, acr: %02x\n", pcr, up->acr);
@@ -179,8 +178,7 @@ static void ni16550_config_prescaler(struct uart_8250_port *up,
 }
 
 static const struct serial_rs485 ni16550_rs485_supported = {
-	.flags = SER_RS485_ENABLED | SER_RS485_MODE_RS422 | SER_RS485_RTS_ON_SEND |
-		 SER_RS485_RTS_AFTER_SEND,
+	.flags = SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND | SER_RS485_RTS_AFTER_SEND,
 	/*
 	 * delay_rts_* and RX_DURING_TX are not supported.
 	 *
