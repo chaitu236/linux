@@ -16,6 +16,7 @@
 #include <linux/io.h>
 #include <linux/init.h>
 #include <linux/module.h>
+#include <linux/of.h>
 #include <linux/property.h>
 #include <linux/clk.h>
 
@@ -330,7 +331,8 @@ static int ni16550_probe(struct platform_device *pdev)
 	/*
 	 * Declaration of the base clock frequency can come from one of:
 	 * - static declaration in this driver (for older ACPI IDs)
-	 * - a "clock-frquency" ACPI
+	 * - a "clock-frquency" ACPI or OF device property
+	 * - an associated OF clock definition
 	 */
 	if (info->uartclk)
 		uart.port.uartclk = info->uartclk;
@@ -358,14 +360,16 @@ static int ni16550_probe(struct platform_device *pdev)
 
 	/*
 	 * The determination of whether or not this is an RS-485 or RS-232 port
-	 * can come from the PMR (if present), otherwise we're solely an RS-485
-	 * port.
+	 * can come from a device property (if present), or it can come from
+	 * the PMR (if present), and otherwise we're solely an RS-485 port.
 	 *
-	 * This is a device-specific property, and there are old devices in the
-	 * field using "transceiver" as an ACPI property, so we have to check
-	 * for that as well.
+	 * This is a device-specific property, and thus has a vendor-prefixed
+	 * "ni,serial-port-mode" form as a devicetree binding. However, there
+	 * are old devices in the field using "transceiver" as an ACPI device
+	 * property, so we have to check for that as well.
 	 */
-	if (!device_property_read_string(dev, "transceiver", &portmode)) {
+	if (!device_property_read_string(dev, "ni,serial-port-mode", &portmode) ||
+	    !device_property_read_string(dev, "transceiver", &portmode)) {
 		rs232_property = strncmp(portmode, "RS-232", 6) == 0;
 
 		dev_dbg(dev, "port is in %s mode (via device property)\n",
@@ -409,6 +413,14 @@ static int ni16550_remove(struct platform_device *pdev)
 	return 0;
 }
 
+static const struct ni16550_device_info ni16550_default = { };
+
+static const struct of_device_id ni16550_of_match[] = {
+	{ .compatible = "ni,ni16550", .data = &ni16550_default },
+	{ },
+};
+MODULE_DEVICE_TABLE(of, ni16550_of_match);
+
 #ifdef CONFIG_ACPI
 /* NI 16550 RS-485 Interface */
 static const struct ni16550_device_info nic7750 = {
@@ -447,6 +459,7 @@ MODULE_DEVICE_TABLE(acpi, ni16550_acpi_match);
 static struct platform_driver ni16550_driver = {
 	.driver = {
 		.name = "ni16550",
+		.of_match_table = ni16550_of_match,
 		.acpi_match_table = ACPI_PTR(ni16550_acpi_match),
 	},
 	.probe = ni16550_probe,
