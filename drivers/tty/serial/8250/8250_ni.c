@@ -407,12 +407,13 @@ err:
 	return ret;
 }
 
-static void ni16550_remove(struct platform_device *pdev)
+static int ni16550_remove(struct platform_device *pdev)
 {
 	struct ni16550_data *data = platform_get_drvdata(pdev);
 
 	clk_disable_unprepare(data->clk);
 	serial8250_unregister_port(data->line);
+	return 0;
 }
 
 static const struct ni16550_device_info ni16550_default = { };
