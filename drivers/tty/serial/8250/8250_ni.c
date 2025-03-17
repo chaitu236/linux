@@ -279,10 +279,10 @@ static int ni16550_probe(struct platform_device *pdev)
 	const struct ni16550_device_info *info;
 	struct device *dev = &pdev->dev;
 	struct uart_8250_port uart = {};
+	unsigned int txfifosz, rxfifosz;
 	unsigned int prescaler = 0;
 	struct ni16550_data *data;
 	const char *portmode;
-	unsigned int txfifosz, rxfifosz;
 	bool rs232_property;
 	int ret;
 	int irq;
