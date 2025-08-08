@@ -6783,7 +6783,8 @@ picked:
 		if (cyclictest_task &&
 		    next != cyclictest_task &&
 		    task_cpu(cyclictest_task) == cpu &&
-		    READ_ONCE(cyclictest_task->__state) == TASK_RUNNING) {
+		    READ_ONCE(cyclictest_task->__state) == TASK_RUNNING &&
+		    strncmp(next->comm, "kworker", 7) == 0) {
 			panic("cyclictest %d not scheduled cpu %d. next->pid %d",
 			      cyclictest_task->pid, cpu, next->pid);
 		}
