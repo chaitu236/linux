@@ -6612,6 +6612,8 @@ static bool try_to_block_task(struct rq *rq, struct task_struct *p,
 	return true;
 }
 
+static struct task_struct *cyclictest_task;
+
 /*
  * __schedule() is the main scheduler function.
  *
@@ -6767,11 +6769,25 @@ picked:
 		psi_sched_switch(prev, next, !task_on_rq_queued(prev) ||
 					     prev->se.sched_delayed);
 
+		if (unlikely(!cyclictest_task)) {
+			if (next->rt_priority == 98) {
+				// Assuming this is cyclictest thread
+				cyclictest_task = next;
+			}
+		}
 		trace_sched_switch(preempt, prev, next, prev_state);
 
 		/* Also unlocks the rq: */
 		rq = context_switch(rq, prev, next, &rf);
 	} else {
+		if (cyclictest_task &&
+		    next != cyclictest_task &&
+		    task_cpu(cyclictest_task) == cpu &&
+		    READ_ONCE(cyclictest_task->__state) == TASK_RUNNING) {
+			panic("cyclictest %d not scheduled cpu %d. next->pid %d",
+			      cyclictest_task->pid, cpu, next->pid);
+		}
+
 		rq_unpin_lock(rq, &rf);
 		__balance_callbacks(rq);
 		raw_spin_rq_unlock_irq(rq);
