@@ -6775,8 +6775,6 @@ picked:
 			    next->nr_cpus_allowed == 1) {
 				// store cyclictest task_struct after rt priority, cpu affinity are set
 				cyclictest_task[cpu] = next;
-				printk("cyclictest_task[%d]: pid %d\n",
-				       cpu, cyclictest_task[cpu]->pid);
 			}
 		}
 		trace_sched_switch(preempt, prev, next, prev_state);
