@@ -6612,7 +6612,7 @@ static bool try_to_block_task(struct rq *rq, struct task_struct *p,
 	return true;
 }
 
-static struct task_struct *cyclictest_task;
+static struct task_struct *cyclictest_task[16];
 
 /*
  * __schedule() is the main scheduler function.
@@ -6769,11 +6769,14 @@ picked:
 		psi_sched_switch(prev, next, !task_on_rq_queued(prev) ||
 					     prev->se.sched_delayed);
 
-		if (unlikely(!cyclictest_task)) {
+		if (unlikely(!cyclictest_task[cpu])) {
 			if (next->rt_priority == 98 &&
-			    strncmp(next->comm, "cyclictest", 10) == 0) {
-				// Observe first cyclictest task with RT priority
-				cyclictest_task = next;
+			    strncmp(next->comm, "cyclictest", 10) == 0 &&
+			    next->nr_cpus_allowed == 1) {
+				// store cyclictest task_struct after rt priority, cpu affinity are set
+				cyclictest_task[cpu] = next;
+				printk("cyclictest_task[%d]: pid %d\n",
+				       cpu, cyclictest_task[cpu]->pid);
 			}
 		}
 		trace_sched_switch(preempt, prev, next, prev_state);
@@ -6781,13 +6784,13 @@ picked:
 		/* Also unlocks the rq: */
 		rq = context_switch(rq, prev, next, &rf);
 	} else {
-		if (cyclictest_task &&
-		    next != cyclictest_task &&
-		    task_cpu(cyclictest_task) == cpu &&
-		    READ_ONCE(cyclictest_task->__state) == TASK_RUNNING &&
+		if (cyclictest_task[cpu] &&
+		    next != cyclictest_task[cpu] &&
+		    task_cpu(cyclictest_task[cpu]) == cpu &&
+		    READ_ONCE(cyclictest_task[cpu]->__state) == TASK_RUNNING &&
 		    strncmp(next->comm, "migration", 9) != 0) {
 			panic("cyclictest %d not scheduled cpu %d. next->pid %d",
-			      cyclictest_task->pid, cpu, next->pid);
+			      cyclictest_task[cpu]->pid, cpu, next->pid);
 		}
 
 		rq_unpin_lock(rq, &rf);
