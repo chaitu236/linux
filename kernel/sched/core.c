@@ -6774,6 +6774,7 @@ picked:
 			    strncmp(next->comm, "cyclictest", 10) == 0) {
 				// Observe first cyclictest task with RT priority
 				cyclictest_task = next;
+				printk("Observing cyclictest pid %d", cyclictest_task->pid);
 			}
 		}
 		trace_sched_switch(preempt, prev, next, prev_state);
