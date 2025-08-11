@@ -6770,8 +6770,9 @@ picked:
 					     prev->se.sched_delayed);
 
 		if (unlikely(!cyclictest_task)) {
-			if (next->rt_priority == 98) {
-				// Assuming this is cyclictest thread
+			if (next->rt_priority == 98 &&
+			    strncmp(next->comm, "cyclictest", 10) == 0) {
+				// Observe first cyclictest task with RT priority
 				cyclictest_task = next;
 			}
 		}
