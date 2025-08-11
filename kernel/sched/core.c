@@ -6777,6 +6777,16 @@ picked:
 				cyclictest_task[cpu] = next;
 			}
 		}
+
+		if (cyclictest_task[cpu] &&
+		    next != cyclictest_task[cpu] &&
+		    task_cpu(cyclictest_task[cpu]) == cpu &&
+		    READ_ONCE(cyclictest_task[cpu]->__state) == TASK_RUNNING &&
+		    strncmp(next->comm, "migration", 9) != 0) {
+			panic("%d cyclictest %d not scheduled cpu %d. next->pid %d",
+			      __LINE__, cyclictest_task[cpu]->pid, cpu, next->pid);
+		}
+
 		trace_sched_switch(preempt, prev, next, prev_state);
 
 		/* Also unlocks the rq: */
@@ -6787,8 +6797,8 @@ picked:
 		    task_cpu(cyclictest_task[cpu]) == cpu &&
 		    READ_ONCE(cyclictest_task[cpu]->__state) == TASK_RUNNING &&
 		    strncmp(next->comm, "migration", 9) != 0) {
-			panic("cyclictest %d not scheduled cpu %d. next->pid %d",
-			      cyclictest_task[cpu]->pid, cpu, next->pid);
+			panic("%d cyclictest %d not scheduled cpu %d. next->pid %d",
+			      __LINE__, cyclictest_task[cpu]->pid, cpu, next->pid);
 		}
 
 		rq_unpin_lock(rq, &rf);
