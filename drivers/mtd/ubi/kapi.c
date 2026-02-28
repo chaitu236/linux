@@ -131,7 +131,8 @@ struct ubi_volume_desc *ubi_open_volume(int ubi_num, int vol_id, int mode)
 	struct ubi_device *ubi;
 	struct ubi_volume *vol;
 
-	pr_err("open device %d, volume %d, mode %d", ubi_num, vol_id, mode);
+	if (ubi_num == 0 && (vol_id == 0 || vol_id == 1))
+		pr_err("open device %d, volume %d, mode %d", ubi_num, vol_id, mode);
 
 	if (ubi_num < 0 || ubi_num >= UBI_MAX_DEVICES)
 		return ERR_PTR(-EINVAL);
@@ -220,7 +221,8 @@ struct ubi_volume_desc *ubi_open_volume(int ubi_num, int vol_id, int mode)
 	}
 	mutex_unlock(&ubi->ckvol_mutex);
 
-	pr_err("%s %d returning desc\n", __func__, __LINE__);
+	if (ubi_num == 0 && (vol_id == 0 || vol_id == 1))
+		pr_err("%s %d returning desc\n", __func__, __LINE__);
 	return desc;
 
 out_unlock:
