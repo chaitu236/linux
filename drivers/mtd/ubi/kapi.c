@@ -167,8 +167,6 @@ struct ubi_volume_desc *ubi_open_volume(int ubi_num, int vol_id, int mode)
 	if (!vol)
 		goto out_unlock;
 
-	dump_stack();
-
 	err = -EBUSY;
 	switch (mode) {
 	case UBI_READONLY:

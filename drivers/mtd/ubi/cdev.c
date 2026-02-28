@@ -59,6 +59,9 @@ static int get_exclusive(struct ubi_volume_desc *desc)
 	int users, err;
 	struct ubi_volume *vol = desc->vol;
 
+	pr_err("%s %d\n", __func__, __LINE__);
+	dump_stack();
+
 	spin_lock(&vol->ubi->volumes_lock);
 	users = vol->readers + vol->writers + vol->exclusive + vol->metaonly;
 	ubi_assert(users > 0);
@@ -85,6 +88,7 @@ static void revoke_exclusive(struct ubi_volume_desc *desc, int mode)
 {
 	struct ubi_volume *vol = desc->vol;
 
+	pr_err("%s %d\n", __func__, __LINE__);
 	spin_lock(&vol->ubi->volumes_lock);
 	ubi_assert(vol->readers == 0 && vol->writers == 0 && vol->metaonly == 0);
 	ubi_assert(vol->exclusive == 1 && desc->mode == UBI_EXCLUSIVE);
