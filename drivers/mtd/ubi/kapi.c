@@ -222,7 +222,7 @@ struct ubi_volume_desc *ubi_open_volume(int ubi_num, int vol_id, int mode)
 	}
 	mutex_unlock(&ubi->ckvol_mutex);
 
-	pr_err("%s %d returning %d\n", __func__, __LINE__, err);
+	pr_err("%s %d returning desc\n", __func__, __LINE__);
 	return desc;
 
 out_unlock:
@@ -234,6 +234,7 @@ out_put_ubi:
 	ubi_put_device(ubi);
 	ubi_err(ubi, "cannot open device %d, volume %d, error %d",
 		ubi_num, vol_id, err);
+	pr_err("%s %d returning %d\n", __func__, __LINE__, err);
 	return ERR_PTR(err);
 }
 EXPORT_SYMBOL_GPL(ubi_open_volume);
