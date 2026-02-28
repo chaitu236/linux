@@ -131,7 +131,7 @@ struct ubi_volume_desc *ubi_open_volume(int ubi_num, int vol_id, int mode)
 	struct ubi_device *ubi;
 	struct ubi_volume *vol;
 
-	dbg_gen("open device %d, volume %d, mode %d", ubi_num, vol_id, mode);
+	pr_err("open device %d, volume %d, mode %d", ubi_num, vol_id, mode);
 
 	if (ubi_num < 0 || ubi_num >= UBI_MAX_DEVICES)
 		return ERR_PTR(-EINVAL);
@@ -166,6 +166,8 @@ struct ubi_volume_desc *ubi_open_volume(int ubi_num, int vol_id, int mode)
 	vol = ubi->volumes[vol_id];
 	if (!vol)
 		goto out_unlock;
+
+	dump_stack();
 
 	err = -EBUSY;
 	switch (mode) {
@@ -208,6 +210,7 @@ struct ubi_volume_desc *ubi_open_volume(int ubi_num, int vol_id, int mode)
 		if (err < 0) {
 			mutex_unlock(&ubi->ckvol_mutex);
 			ubi_close_volume(desc);
+			pr_err("%s %d returning %d\n", __func__, __LINE__, err);
 			return ERR_PTR(err);
 		}
 		if (err == 1) {
@@ -219,6 +222,7 @@ struct ubi_volume_desc *ubi_open_volume(int ubi_num, int vol_id, int mode)
 	}
 	mutex_unlock(&ubi->ckvol_mutex);
 
+	pr_err("%s %d returning %d\n", __func__, __LINE__, err);
 	return desc;
 
 out_unlock:
