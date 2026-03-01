@@ -589,6 +589,18 @@ static long vol_cdev_ioctl(struct file *file, unsigned int cmd,
 		break;
 	}
 
+	case UBI_IOCVOL_GETXCLUSIVE:
+	{
+		err = get_exclusive(desc);
+		break;
+	}
+
+	case UBI_IOCVOL_REVOKEXCLUSIVE:
+	{
+		revoke_exclusive(desc, UBI_READWRITE);
+		break;
+	}
+
 	default:
 		err = -ENOTTY;
 		break;

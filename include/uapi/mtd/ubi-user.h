@@ -207,6 +207,9 @@
 /* Remove the R/O block device */
 #define UBI_IOCVOLRMBLK _IO(UBI_VOL_IOC_MAGIC, 8)
 
+#define UBI_IOCVOL_GETXCLUSIVE _IO(UBI_VOL_IOC_MAGIC, 9)
+#define UBI_IOCVOL_REVOKEXCLUSIVE _IO(UBI_VOL_IOC_MAGIC, 10)
+
 /* Maximum MTD device name length supported by UBI */
 #define MAX_UBI_MTD_NAME_LEN 127
 
