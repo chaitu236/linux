@@ -76,10 +76,6 @@
 			label = "image";
 			reg = <0x00540000 0x00a80000>;
 		};
-		partition@0x00fc0000 {
-			label = "spare";
-			reg = <0x00fc0000 0x00000000>;
-		};
 	};
 };
 
