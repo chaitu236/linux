@@ -260,8 +260,7 @@ int sh1107_offset(struct sh1107 *sh, unsigned char offset)
 }
 EXPORT_SYMBOL_GPL(sh1107_offset);
 
-static int sh1107_probe(struct i2c_client *client,
-			const struct i2c_device_id *id)
+static int sh1107_probe(struct i2c_client *client)
 {
 	struct device *dev = &client->dev;
 	struct sh1107 *sh;
