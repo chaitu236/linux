@@ -4461,6 +4461,8 @@ static const struct net_device_ops macb_netdev_ops = {
 };
 
 #ifdef CONFIG_FPGA_PERIPHERAL
+int macb_fpga_notifier(struct notifier_block *nb, unsigned long val, void *data);
+
 int macb_fpga_notifier(struct notifier_block *nb, unsigned long val, void *data)
 {
 	struct macb *bp = container_of(nb, struct macb, fpga_notifier);
