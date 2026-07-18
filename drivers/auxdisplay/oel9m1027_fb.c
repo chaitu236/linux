@@ -27,6 +27,7 @@
 #include <linux/platform_device.h>
 #include <linux/string.h>
 #include <linux/uaccess.h>
+#include <linux/vmalloc.h>
 #include <linux/workqueue.h>
 
 #include "oel9m1027.h"
@@ -135,7 +136,6 @@ int oel9m1027fb_init(struct oel9m1027 *oled)
 	fb->var = oel9m1027fb_var;
 	fb->pseudo_palette = NULL;
 	fb->par = NULL;
-	fb->flags = FBINFO_FLAG_DEFAULT;
 	oled->fb = fb;
 
 	if (register_framebuffer(fb) < 0) {
