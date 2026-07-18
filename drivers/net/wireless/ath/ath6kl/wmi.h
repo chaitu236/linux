@@ -2063,10 +2063,6 @@ struct wmi_set_rsn_cmd {
 	u16 rsn_capab;
 } __packed;
 
-struct wmi_set_rsn_cmd {
-	u16 rsn_capab;
-} __packed;
-
 struct wmi_set_ie_cmd {
 	u8 ie_id;
 	u8 ie_field;	/* enum wmi_ie_field_type */
