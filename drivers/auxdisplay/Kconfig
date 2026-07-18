@@ -520,7 +520,7 @@ config OEL9M1027
 	select FB_SYS_FILLRECT
 	select FB_SYS_COPYAREA
 	select FB_SYS_IMAGEBLIT
-	select FB_SYS_FOPS
+	select FB_SYSMEM_FOPS
 	default n
 	help
 	  If you have a Truly 64x128 2-color LCD, OEL9M1027 Series,
