@@ -27,6 +27,7 @@
 #include <linux/delay.h>
 #include <linux/device.h>
 #include <linux/jiffies.h>
+#include <linux/mod_devicetable.h>
 #include <linux/mutex.h>
 #include <linux/uaccess.h>
 #include <linux/vmalloc.h>
@@ -289,7 +290,7 @@ none:
 	return ret;
 }
 
-static int oel9m1027_remove(struct platform_device *pdev)
+static void oel9m1027_remove(struct platform_device *pdev)
 {
 	struct oel9m1027 *oled = platform_get_drvdata(pdev);
 
@@ -298,8 +299,6 @@ static int oel9m1027_remove(struct platform_device *pdev)
 	cancel_delayed_work_sync(&oled->dwork);
 	oel9m1027_off(oled);
 	mutex_destroy(&oled->lock);
-
-	return 0;
 }
 
 static const struct of_device_id oel9m1027_of_match[] = {
