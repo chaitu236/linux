@@ -282,11 +282,6 @@ static int sh1107_probe(struct i2c_client *client)
 	return devm_of_platform_populate(dev);
 }
 
-static int sh1107_remove(struct i2c_client *client)
-{
-	return 0;
-}
-
 static const struct of_device_id sh1107_dt_ids[] = {
 	{ .compatible = "sinowealth,sh1107" },
 	{ },
@@ -305,7 +300,6 @@ static struct i2c_driver sh1107_driver = {
 		.of_match_table	= sh1107_dt_ids,
 	},
 	.probe		= sh1107_probe,
-	.remove		= sh1107_remove,
 	.id_table	= sh1107_ids,
 };
 module_i2c_driver(sh1107_driver);
